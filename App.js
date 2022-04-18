@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Keyboard,
   ScrollView,
+  FlatList,
   Button,
 } from "react-native";
 import Task from "./components/Task";
@@ -33,25 +34,36 @@ export default function App() {
 
   return (
     <View style={tw` flex bg-blue-50 px-4 h-full w-full py-10`}>
-      <ScrollView>
-        <View>
-          <Text style={tw`text-green-400 my-6 mx-20 text-4xl`}>
-            Today's tasks
-          </Text>
-          <View>
-            {taskItems.map((item, index) => {
-              return (
-                <TouchableOpacity
+      <FlatList data={taskItems} renderItem={({item, index}) => 
+        <TouchableOpacity
                   key={index}
                   onPress={() => completeTask(index)}
                 >
                   <Task text={item} />
                 </TouchableOpacity>
-              );
-            })}
-          </View>
-        </View>
-      </ScrollView>
+} ListHeaderComponent={<Text style={tw`text-green-400 my-6 mx-20 text-4xl`}>
+            Today's tasks
+          </Text>
+} />
+//       <ScrollView>
+//         <View>
+//           <Text style={tw`text-green-400 my-6 mx-20 text-4xl`}>
+//             Today's tasks
+//           </Text>
+//           <View>
+//             {taskItems.map((item, index) => {
+//               return (
+//                 <TouchableOpacity
+//                   key={index}
+//                   onPress={() => completeTask(index)}
+//                 >
+//                   <Task text={item} />
+//                 </TouchableOpacity>
+//               );
+//             })}
+//           </View>
+//         </View>
+//       </ScrollView>
       <KeyboardAvoidingView>
         <TextInput
           placeholder={"Write a task"}
