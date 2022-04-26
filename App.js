@@ -1,82 +1,45 @@
-import React, { useState } from "react";
-import {
-  KeyboardAvoidingView,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-  Keyboard,
-  ScrollView,
-  FlatList,
-  Button,
-} from "react-native";
-import Task from "./components/Task";
-import { create } from "tailwind-react-native-classnames";
-import styles from "./tw-rn-styles.json";
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Users, { USERS_SCREEN } from "./screens/Users";
+import Todo, { TODO_SCREEN } from "./screens/Todo";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
-const tw = create(styles);
+const Tab = createBottomTabNavigator();
 
-export default function App() {
-  const [task, setTask] = useState();
-  const [taskItems, setTaskItems] = useState([]);
-
-  const handleAddTask = () => {
-    Keyboard.dismiss();
-    setTaskItems([...taskItems, task]);
-    setTask(null);
-  };
-
-  const completeTask = (index) => {
-    let itemsCopy = [...taskItems];
-    itemsCopy.splice(index, 1);
-    setTaskItems(itemsCopy);
-  };
-
+function App() {
   return (
-    <View style={tw` flex bg-blue-50 px-4 h-full w-full py-10`}>
-      <FlatList data={taskItems} renderItem={({item, index}) => 
-        <TouchableOpacity
-                  key={index}
-                  onPress={() => completeTask(index)}
-                >
-                  <Task text={item} />
-                </TouchableOpacity>
-} ListHeaderComponent={<Text style={tw`text-green-400 my-6 mx-20 text-4xl`}>
-            Today's tasks
-          </Text>
-} />
-//       <ScrollView>
-//         <View>
-//           <Text style={tw`text-green-400 my-6 mx-20 text-4xl`}>
-//             Today's tasks
-//           </Text>
-//           <View>
-//             {taskItems.map((item, index) => {
-//               return (
-//                 <TouchableOpacity
-//                   key={index}
-//                   onPress={() => completeTask(index)}
-//                 >
-//                   <Task text={item} />
-//                 </TouchableOpacity>
-//               );
-//             })}
-//           </View>
-//         </View>
-//       </ScrollView>
-      <KeyboardAvoidingView>
-        <TextInput
-          placeholder={"Write a task"}
-          value={task}
-          onChangeText={(text) => setTask(text)}
-          style={tw` bg-white border-green-400 rounded-xl border-2 mb-2`}
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={{
+          tabBarActiveTintColor: "#074C0E",
+          tabBarInactiveTintColor: "gray",
+        }}
+      >
+        <Tab.Screen
+          component={Todo}
+          name={TODO_SCREEN.name}
+          options={{
+            tabBarLabel: "To Do",
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons name="home" color={color} size={30} />
+            ),
+          }}
         />
-        <Button
-          title="add task"
-          color="#29AB87"
-          onPress={() => handleAddTask()}
+        {/* here it is navigating to users component wich is navigatin to users details */}
+        <Tab.Screen
+          component={Users}
+          name={USERS_SCREEN.name}
+          options={{
+            tabBarLabel: "Users",
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons name="account" color={color} size={30} />
+            ),
+          }}
         />
-      </KeyboardAvoidingView>
-    </View>
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
+
+export default App;
